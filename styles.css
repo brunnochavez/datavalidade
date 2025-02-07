@@ -85,15 +85,6 @@ button.secondary:hover {
     background: #218838;
 }
 
-button.tertiary {
-    background: #ffc107;
-    color: white;
-}
-
-button.tertiary:hover {
-    background: #e0a800;
-}
-
 button.quaternary {
     background: #17a2b8;
     color: white;
@@ -113,20 +104,30 @@ button.quaternary:hover {
 }
 
 #result h2 {
-    font-size: 20px;
-    margin-bottom: 15px;
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+#searchResult {
+    margin-bottom: 20px;
+}
+
+#searchResult p {
+    margin: 5px 0;
+    font-size: 14px;
 }
 
 .item {
     background: #ffffff;
-    padding: 15px;
+    padding: 10px;
     border-radius: 8px;
     margin-bottom: 10px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    font-size: 14px;
 }
 
 .item p {
-    margin: 5px 0;
+    margin: 3px 0;
 }
 
 .item button {
@@ -136,7 +137,8 @@ button.quaternary:hover {
     padding: 5px 10px;
     border-radius: 5px;
     cursor: pointer;
-    margin-top: 10px;
+    margin-top: 5px;
+    font-size: 12px;
 }
 
 .item button:hover {
