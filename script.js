@@ -58,16 +58,27 @@ function updateItemListDisplay() {
     itemListDiv.innerHTML = "";
 
     itemList.forEach((item, index) => {
+        // Formatar a data no padrão brasileiro (dd/MM/yyyy)
+        const dataValidade = formatarDataBrasileira(item.validade);
+
         itemListDiv.innerHTML += `
             <div class="item">
                 <p><strong>Código:</strong> ${item.codigo}</p>
                 <p><strong>Produto:</strong> ${item.descricao}</p>
                 <p><strong>Quantidade:</strong> ${item.quantidade}</p>
-                <p><strong>Validade:</strong> ${item.validade}</p>
+                <p><strong>Validade:</strong> ${dataValidade}</p>
                 <button onclick="removeItem(${index})">❌ Remover</button>
             </div>
         `;
     });
+}
+
+// Função para formatar a data no padrão brasileiro (dd/MM/yyyy)
+function formatarDataBrasileira(data) {
+    if (!data) return ""; // Retorna vazio se a data não for fornecida
+
+    const [ano, mes, dia] = data.split('-'); // Divide a data no formato yyyy-MM-dd
+    return `${dia}/${mes}/${ano}`; // Retorna no formato dd/MM/yyyy
 }
 
 // ❌ Remover item da lista
