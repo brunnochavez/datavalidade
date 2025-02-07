@@ -22,7 +22,7 @@ document.getElementById('excelFileInput').addEventListener('change', function(ev
     }
 });
 
-// 🔍 Pesquisar produto e adicionar à lista
+// 🔍 Adicionar produto à lista
 function searchProduct() {
     const barcode = document.getElementById('barcodeInput').value.trim();
     const quantity = document.getElementById('quantityInput').value.trim();
@@ -81,6 +81,7 @@ function clearSearch() {
     document.getElementById('barcodeInput').value = "";
     document.getElementById('quantityInput').value = "";
     document.getElementById('expiryDateInput').value = "";
+    document.getElementById('productDescription').value = "";
 }
 
 // 📸 Função para Escanear Código de Barras
@@ -146,6 +147,24 @@ function startScanner() {
 
             // Preencher o campo de código de barras
             document.getElementById("barcodeInput").value = code;
+
+            // Pesquisar o produto e exibir o resultado
+            const product = products.find(p => p.barras === code);
+            if (product) {
+                // Exibir a descrição no campo #productDescription
+                document.getElementById("productDescription").value = product.descricao;
+
+                // Exibir o resultado na seção #searchResult
+                const searchResultDiv = document.getElementById('searchResult');
+                searchResultDiv.innerHTML = `
+                    <p><strong>Descrição:</strong> ${product.descricao}</p>
+                    <p><strong>Preço:</strong> ${parseFloat(product.preco.replace(',', '.')).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</p>
+                `;
+            } else {
+                alert("Produto não encontrado.");
+            }
+
+            // Fechar a câmera
             stopScanner();
         }
     });
@@ -159,33 +178,6 @@ function stopScanner() {
         document.body.removeChild(scannerContainer);
     }
     scannerActive = false;
-}
-
-// 💾 Salvar Dados em um arquivo .txt
-function saveData() {
-    if (itemList.length === 0) {
-        alert("Nenhum item foi adicionado à lista.");
-        return;
-    }
-
-    let data = "Itens Adicionados:\n\n";
-    itemList.forEach((item, index) => {
-        data += `Item ${index + 1}:\n`;
-        data += `Código de Barras: ${item.codigo}\n`;
-        data += `Produto: ${item.descricao}\n`;
-        data += `Quantidade: ${item.quantidade}\n`;
-        data += `Validade: ${item.validade}\n\n`;
-    });
-
-    const blob = new Blob([data], { type: 'text/plain' });
-    const url = URL.createObjectURL(blob);
-
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'lista_produtos.txt';
-    a.click();
-
-    URL.revokeObjectURL(url);
 }
 
 // 📤 Exportar para WhatsApp
