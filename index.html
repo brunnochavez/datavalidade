@@ -15,10 +15,11 @@
         <input type="date" id="expiryDateInput" placeholder="Data de Validade" />
         <button class="primary" onclick="searchProduct()">🔍 Pesquisar</button>
         <button class="secondary" onclick="clearSearch(); startScanner();">📸 Escanear Código</button>
-        <button class="tertiary" onclick="saveData()">💾 Salvar Dados</button>
         <button class="quaternary" onclick="exportData()">📤 Exportar para WhatsApp</button>
 
         <div id="result">
+            <h2>Resultado da Busca</h2>
+            <div id="searchResult"></div>
             <h2>Itens Adicionados</h2>
             <div id="itemList"></div>
         </div>
