@@ -1,4 +1,5 @@
-let products = [];
+let products = []; // Lista de produtos carregada do Excel
+let itemList = []; // Lista de itens adicionados pelo usuário
 let scannerActive = false;
 
 // 📂 Carregar arquivo Excel
@@ -21,23 +22,63 @@ document.getElementById('excelFileInput').addEventListener('change', function(ev
     }
 });
 
+// 🔍 Pesquisar produto e adicionar à lista
 function searchProduct() {
     const barcode = document.getElementById('barcodeInput').value.trim();
+    const quantity = document.getElementById('quantityInput').value.trim();
+    const expiryDate = document.getElementById('expiryDateInput').value.trim();
+
+    if (!barcode || !quantity || !expiryDate) {
+        alert("Por favor, preencha todos os campos.");
+        return;
+    }
+
     const product = products.find(p => p.barras === barcode);
     
     if (product) {
-        document.getElementById('description').textContent = product.descricao;
-        document.getElementById('price').textContent = parseFloat(product.preco.replace(',', '.')).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        // Adicionar o item à lista
+        itemList.push({
+            codigo: barcode,
+            descricao: product.descricao,
+            quantidade: quantity,
+            validade: expiryDate
+        });
+
+        // Atualizar a exibição
+        updateItemListDisplay();
+        clearSearch();
     } else {
-        document.getElementById('description').textContent = 'Produto não encontrado';
-        document.getElementById('price').textContent = '';
+        alert("Produto não encontrado.");
     }
 }
 
+// 🗒️ Atualizar a exibição da lista de itens
+function updateItemListDisplay() {
+    const itemListDiv = document.getElementById('itemList');
+    itemListDiv.innerHTML = "";
+
+    itemList.forEach((item, index) => {
+        itemListDiv.innerHTML += `
+            <div class="item">
+                <p><strong>Código:</strong> ${item.codigo}</p>
+                <p><strong>Produto:</strong> ${item.descricao}</p>
+                <p><strong>Quantidade:</strong> ${item.quantidade}</p>
+                <p><strong>Validade:</strong> ${item.validade}</p>
+                <button onclick="removeItem(${index})">❌ Remover</button>
+            </div>
+        `;
+    });
+}
+
+// ❌ Remover item da lista
+function removeItem(index) {
+    itemList.splice(index, 1); // Remove o item da lista
+    updateItemListDisplay(); // Atualiza a exibição
+}
+
+// 🧹 Limpar campos de busca
 function clearSearch() {
     document.getElementById('barcodeInput').value = "";
-    document.getElementById('description').textContent = "";
-    document.getElementById('price').textContent = "";
     document.getElementById('quantityInput').value = "";
     document.getElementById('expiryDateInput').value = "";
 }
@@ -103,14 +144,14 @@ function startScanner() {
             const bipSound = document.getElementById("bipSound");
             bipSound.play();
 
-            // Preencher o campo de código de barras e pesquisar
+            // Preencher o campo de código de barras
             document.getElementById("barcodeInput").value = code;
-            searchProduct();
             stopScanner();
         }
     });
 }
 
+// 🛑 Parar o escaneamento
 function stopScanner() {
     Quagga.stop();
     const scannerContainer = document.getElementById("scanner-container");
@@ -122,24 +163,26 @@ function stopScanner() {
 
 // 💾 Salvar Dados em um arquivo .txt
 function saveData() {
-    const barcode = document.getElementById('barcodeInput').value.trim();
-    const description = document.getElementById('description').textContent;
-    const quantity = document.getElementById('quantityInput').value;
-    const expiryDate = document.getElementById('expiryDateInput').value;
-
-    if (!barcode || !description || !quantity || !expiryDate) {
-        alert("Por favor, preencha todos os campos.");
+    if (itemList.length === 0) {
+        alert("Nenhum item foi adicionado à lista.");
         return;
     }
 
-    const data = `Código de Barras: ${barcode}\nProduto: ${description}\nQuantidade: ${quantity}\nValidade: ${expiryDate}`;
+    let data = "Itens Adicionados:\n\n";
+    itemList.forEach((item, index) => {
+        data += `Item ${index + 1}:\n`;
+        data += `Código de Barras: ${item.codigo}\n`;
+        data += `Produto: ${item.descricao}\n`;
+        data += `Quantidade: ${item.quantidade}\n`;
+        data += `Validade: ${item.validade}\n\n`;
+    });
 
     const blob = new Blob([data], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
 
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'dados_produto.txt';
+    a.download = 'lista_produtos.txt';
     a.click();
 
     URL.revokeObjectURL(url);
@@ -147,17 +190,19 @@ function saveData() {
 
 // 📤 Exportar para WhatsApp
 function exportData() {
-    const barcode = document.getElementById('barcodeInput').value.trim();
-    const description = document.getElementById('description').textContent;
-    const quantity = document.getElementById('quantityInput').value;
-    const expiryDate = document.getElementById('expiryDateInput').value;
-
-    if (!barcode || !description || !quantity || !expiryDate) {
-        alert("Por favor, preencha todos os campos.");
+    if (itemList.length === 0) {
+        alert("Nenhum item foi adicionado à lista.");
         return;
     }
 
-    const data = `Código de Barras: ${barcode}\nProduto: ${description}\nQuantidade: ${quantity}\nValidade: ${expiryDate}`;
+    let data = "Itens Adicionados:\n\n";
+    itemList.forEach((item, index) => {
+        data += `Item ${index + 1}:\n`;
+        data += `Código de Barras: ${item.codigo}\n`;
+        data += `Produto: ${item.descricao}\n`;
+        data += `Quantidade: ${item.quantidade}\n`;
+        data += `Validade: ${item.validade}\n\n`;
+    });
 
     const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(data)}`;
     window.open(whatsappUrl, '_blank');
