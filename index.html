@@ -13,7 +13,8 @@
         <input type="text" id="barcodeInput" placeholder="Escaneie ou digite o código de barras" />
         <input type="number" id="quantityInput" placeholder="Quantidade" />
         <input type="date" id="expiryDateInput" placeholder="Data de Validade" />
-        <button class="primary" onclick="searchProduct()">🔍 Pesquisar</button>
+        <input type="text" id="productDescription" placeholder="Descrição do Produto" readonly />
+        <button class="primary" onclick="searchProduct()">➕ Adicionar</button>
         <button class="secondary" onclick="clearSearch(); startScanner();">📸 Escanear Código</button>
         <button class="quaternary" onclick="exportData()">📤 Exportar para WhatsApp</button>
 
