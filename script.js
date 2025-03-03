@@ -3,9 +3,26 @@ let itemList = []; // Lista de itens adicionados pelo usuário
 let scannerActive = false;
 
 // Carregar produtos ao iniciar
-window.onload = function () {
-    products = loadData();
+window.onload = async function () {
+    products = await loadData();
 };
+
+// Função para carregar dados (exemplo)
+async function loadData() {
+    try {
+        const response = await fetch('produtos.json');
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error("Erro ao carregar os dados:", error);
+        return [];
+    }
+}
+
+// Função para buscar um produto pelo código de barras
+function findProduct(barcode) {
+    return products.find(product => product.codigo === barcode);
+}
 
 // 🔍 Adicionar produto à lista
 function searchProduct() {
