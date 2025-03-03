@@ -9,7 +9,7 @@
 <body>
     <div class="container">
         <h1>Consulta de Produtos</h1>
-        <input type="file" id="jsonFileInput" accept=".json" />
+        <input type="file" id="excelFileInput" accept=".xlsx" />
         <input type="text" id="barcodeInput" placeholder="Escaneie ou digite o código de barras" />
         <input type="number" id="quantityInput" placeholder="Quantidade" />
         <input type="date" id="expiryDateInput" placeholder="Data de Validade" />
@@ -17,7 +17,6 @@
         <button class="primary" onclick="searchProduct()">➕ Adicionar</button>
         <button class="secondary" onclick="clearSearch(); startScanner();">📸 Escanear Código</button>
         <button class="quaternary" onclick="exportData()">📤 Exportar para WhatsApp</button>
-        <button class="tertiary" onclick="exportToJsonFile()">💾 Exportar para JSON</button>
 
         <div id="result">
             <h2>Resultado da Busca</h2>
@@ -31,7 +30,7 @@
     <audio id="bipSound" src="bip.mp3"></audio>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
-    <script src="data.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
