@@ -65,7 +65,7 @@ input[type="date"]:focus {
     font-size: 16px;
     background-color: #f9f9f9;
     color: #333;
-    cursor: not-allowed; /* Indica que o campo é somente leitura */
+    cursor: not-allowed;
 }
 
 button {
@@ -95,6 +95,15 @@ button.secondary {
 
 button.secondary:hover {
     background: #218838;
+}
+
+button.tertiary {
+    background: #ffc107;
+    color: white;
+}
+
+button.tertiary:hover {
+    background: #e0a800;
 }
 
 button.quaternary {
